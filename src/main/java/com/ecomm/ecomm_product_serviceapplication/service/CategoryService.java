@@ -6,26 +6,26 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CategoryService implements ICategoryService {
+public class CategoryService implements ICategoryService{
 
 
-    public List<Category> getAllCategories() {
+    public List<Category> getAllCategories(){
         return null;
     }
 
-    public Category getCategoryById(Long id) {
+    public Category getCategoryById(Long id){
         return null;
     }
 
-    public Category createCategory(Category category) {
+    public Category createCategory(Category category){
         return null;
     }
 
-    public boolean deleteCategory(Long id) {
+    public boolean deleteCategory(Long id){
         return false;
     }
 
-    public Category replaceCategory(Category category) {
+    public Category replaceCategory(Category category){
         return null;
     }
 }
