@@ -10,7 +10,7 @@ public interface ICategoryService {
 
     List<CategoryResponseDto> getAllCategories();
 
-    Category getCategoryById(Long id);
+    CategoryResponseDto getCategoryById(Long id);
 
     CategoryResponseDto createCategory(CategoryRequestDto categoryRequestDto);
 

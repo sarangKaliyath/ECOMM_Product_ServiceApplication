@@ -3,6 +3,7 @@ package com.ecomm.ecomm_product_serviceapplication.service;
 import com.ecomm.ecomm_product_serviceapplication.dto.CategoryRequestDto;
 import com.ecomm.ecomm_product_serviceapplication.dto.CategoryResponseDto;
 import com.ecomm.ecomm_product_serviceapplication.exceptions.CategoryAlreadyExistsException;
+import com.ecomm.ecomm_product_serviceapplication.exceptions.CategoryNotFoundException;
 import com.ecomm.ecomm_product_serviceapplication.mapper.CategoryMapper;
 import com.ecomm.ecomm_product_serviceapplication.model.Category;
 import com.ecomm.ecomm_product_serviceapplication.repository.CategoryRepo;
@@ -23,8 +24,9 @@ public class CategoryService implements ICategoryService {
         return categories.stream().map(CategoryMapper::toResponse).collect(Collectors.toList());
     }
 
-    public Category getCategoryById(Long id) {
-        return null;
+    public CategoryResponseDto getCategoryById(Long id) {
+        Category category = categoryRepo.findById(id).orElseThrow(() -> new CategoryNotFoundException("Invalid category id : " + id));
+        return CategoryMapper.toResponse(category);
     }
 
     public CategoryResponseDto createCategory(CategoryRequestDto categoryRequestDto) {
@@ -33,7 +35,7 @@ public class CategoryService implements ICategoryService {
         if (categoryRepo.existsByName(category.getName())) {
             throw new CategoryAlreadyExistsException("Category with the name " + category.getName() + " already exists.");
         }
-            categoryRepo.save(category);
+        categoryRepo.save(category);
         return CategoryMapper.toResponse(category);
     }
 
