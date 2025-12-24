@@ -61,4 +61,10 @@ class ProductControllerTest {
         assertEquals("http://test-product-two", secondProduct.getImageUrl());
         assertEquals("Test ProductTwo Description", secondProduct.getDescription());
     }
+
+    public void TestGetAllProducts_WhenNoProducts_ReturnsEmptyList() {
+        when(productService.getAllProducts()).thenReturn(List.of());
+        assertEquals(0, productService.getAllProducts().size());
+    }
+
 }

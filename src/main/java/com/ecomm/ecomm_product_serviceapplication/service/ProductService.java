@@ -1,7 +1,13 @@
 package com.ecomm.ecomm_product_serviceapplication.service;
 
+import com.ecomm.ecomm_product_serviceapplication.dto.ProductRequestDto;
+import com.ecomm.ecomm_product_serviceapplication.dto.ProductResponseDto;
+import com.ecomm.ecomm_product_serviceapplication.exceptions.CategoryNotFoundException;
+import com.ecomm.ecomm_product_serviceapplication.mapper.ProductMapper;
+import com.ecomm.ecomm_product_serviceapplication.model.Category;
 import com.ecomm.ecomm_product_serviceapplication.model.Product;
 import com.ecomm.ecomm_product_serviceapplication.model.State;
+import com.ecomm.ecomm_product_serviceapplication.repository.CategoryRepo;
 import com.ecomm.ecomm_product_serviceapplication.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +19,8 @@ import java.util.Optional;
 public class ProductService implements IProductService {
     @Autowired
     private ProductRepo productRepo;
+    @Autowired
+    private CategoryRepo categoryRepo;
 
     public List<Product> getAllProducts() {
         return productRepo.findAll();
@@ -23,34 +31,24 @@ public class ProductService implements IProductService {
         return productOptional.orElse(null);
     }
 
-    public Product createProduct(Product product) {
-        Optional<Product> productOptional = productRepo.findById(product.getId());
-        if (productOptional.isPresent()) return null;
-        return productRepo.save(product);
+    public ProductResponseDto createProduct(ProductRequestDto requestDto) {
+        Product product = ProductMapper.toEntity(requestDto);
+
+        Category category = categoryRepo.findById(requestDto.getCategoryId())
+                .orElseThrow(() -> new CategoryNotFoundException("Invalid Category ID."));
+
+        product.setCategory(category);
+
+        Product savedProduct = productRepo.save(product);
+
+        return ProductMapper.toResponse(savedProduct);
     }
 
     public Product replaceProduct(Product product, long id) {
-        Optional<Product> productOptional = productRepo.findById(id);
-        if (productOptional.isEmpty()) return null;
-
-        product.setId(id);
-        product.setCreatedAt(productOptional.get().getCreatedAt());
-        return productRepo.save(product);
+        return null;
     }
 
     public boolean deleteProduct(Long id) {
-        Optional<Product> productOptional = productRepo.findById(id);
-        if (productOptional.isEmpty()) return false;
-
-        Product product = productOptional.get();
-
-        if (product.getState().equals(State.ACTIVE)) {
-            product.setState(State.INACTIVE);
-            productRepo.save(product);
-        } else {
-            productRepo.deleteById(id);
-        }
-
-        return true;
+        return false;
     }
 }
