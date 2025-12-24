@@ -1,16 +1,18 @@
 package com.ecomm.ecomm_product_serviceapplication.service;
 
+import com.ecomm.ecomm_product_serviceapplication.dto.CategoryRequestDto;
+import com.ecomm.ecomm_product_serviceapplication.dto.CategoryResponseDto;
 import com.ecomm.ecomm_product_serviceapplication.model.Category;
 
 import java.util.List;
 
 public interface ICategoryService {
 
-    List<Category> getAllCategories();
+    List<CategoryResponseDto> getAllCategories();
 
     Category getCategoryById(Long id);
 
-    Category createCategory(Category category);
+    CategoryResponseDto createCategory(CategoryRequestDto categoryRequestDto);
 
     boolean deleteCategory(Long id);
 
