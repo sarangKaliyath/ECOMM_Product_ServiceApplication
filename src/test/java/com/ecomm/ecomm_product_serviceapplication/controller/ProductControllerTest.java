@@ -1,5 +1,7 @@
 package com.ecomm.ecomm_product_serviceapplication.controller;
 
+import com.ecomm.ecomm_product_serviceapplication.dto.CategoryResponseDto;
+import com.ecomm.ecomm_product_serviceapplication.dto.ProductRequestDto;
 import com.ecomm.ecomm_product_serviceapplication.dto.ProductResponseDto;
 import com.ecomm.ecomm_product_serviceapplication.exceptions.ProductNotFoundException;
 import com.ecomm.ecomm_product_serviceapplication.mapper.ProductMapper;
@@ -10,6 +12,7 @@ import org.mockito.internal.matchers.Equality;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -101,6 +104,45 @@ class ProductControllerTest {
 
         assertEquals("Invalid Product ID", ex.getMessage());
         verify(productService, times(1)).getProductById(3L);
+    }
+
+    @Test
+    public void TestCreateProduct_WithValidProduct_ReturnsProductSuccessfully() {
+        // Arrange
+        ProductRequestDto req = new ProductRequestDto("Phone",
+                "Latest smartphone",
+                699.99,
+                "http://example.com/phone.jpg",
+                2L
+        );
+
+        ProductResponseDto responseDto = new ProductResponseDto(
+                1L,
+                "Phone",
+                "Latest smartphone",
+                699.99,
+                "http://example.com/phone.jpg",
+                new CategoryResponseDto(2L, "Electronics", "All electronics items.")
+        );
+
+        when(productService.createProduct(req)).thenReturn(responseDto);
+
+        // Act
+        ResponseEntity<ProductResponseDto> response = productController.createProduct(req);
+        ProductResponseDto product = response.getBody();
+
+        // Assert
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(product);
+        assertEquals(1L, product.getId());
+        assertEquals("Phone", product.getName());
+        assertEquals(699.99, product.getPrice());
+        assertEquals("http://example.com/phone.jpg", product.getImageUrl());
+        assertEquals(2L, product.getCategory().getId());
+        assertEquals("Electronics", product.getCategory().getName());
+        assertEquals("All electronics items.", product.getCategory().getDescription());
+
+        verify(productService, times(1)).createProduct(req);
     }
 
 
