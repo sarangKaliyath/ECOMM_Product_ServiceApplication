@@ -20,7 +20,7 @@ public class ProductController {
     private IProductService productService;
 
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<ProductResponseDto> getAllProducts() {
         return productService.getAllProducts();
     }
 

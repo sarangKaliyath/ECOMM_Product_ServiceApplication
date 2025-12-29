@@ -22,8 +22,8 @@ public class ProductService implements IProductService {
     @Autowired
     private CategoryRepo categoryRepo;
 
-    public List<Product> getAllProducts() {
-        return productRepo.findAll();
+    public List<ProductResponseDto> getAllProducts() {
+        return productRepo.findAll().stream().map(ProductMapper::toResponse).toList();
     }
 
     public ProductResponseDto getProductById(Long id) {

@@ -31,25 +31,24 @@ class ProductControllerTest {
     public void TestGetAllProducts_ReturnsProductsSuccessfully() {
 
         // Arrange
-        List<Product> mockProd = createProducts();
+        List<ProductResponseDto> mockProd = createProducts().stream().map(ProductMapper::toResponse).toList();
 
         // Stub the MOCK
         when(productService.getAllProducts()).thenReturn(mockProd);
 
         // Act
-        List<Product> products = productController.getAllProducts();
-
+        List<ProductResponseDto> products = productController.getAllProducts();
         // Assert
         assertEquals(2, products.size());
 
-        Product firstProduct = products.get(0);
+        ProductResponseDto firstProduct = products.get(0);
         assertEquals("productOne", firstProduct.getName());
         assertEquals(1L, firstProduct.getId());
         assertEquals(100.0, firstProduct.getPrice());
         assertEquals("http://test-product-one", firstProduct.getImageUrl());
         assertEquals("Test ProductOne Description", firstProduct.getDescription());
 
-        Product secondProduct = products.get(1);
+        ProductResponseDto secondProduct = products.get(1);
         assertEquals("productTwo", secondProduct.getName());
         assertEquals(2L, secondProduct.getId());
         assertEquals(200.0, secondProduct.getPrice());
@@ -65,7 +64,7 @@ class ProductControllerTest {
         when(productService.getAllProducts()).thenReturn(List.of());
 
         // Act
-        List<Product> products = productController.getAllProducts();
+        List<ProductResponseDto> products = productController.getAllProducts();
 
         // Assert
         assertEquals(0, products.size());
