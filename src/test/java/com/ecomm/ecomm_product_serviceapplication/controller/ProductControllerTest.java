@@ -3,6 +3,7 @@ package com.ecomm.ecomm_product_serviceapplication.controller;
 import com.ecomm.ecomm_product_serviceapplication.dto.CategoryResponseDto;
 import com.ecomm.ecomm_product_serviceapplication.dto.ProductRequestDto;
 import com.ecomm.ecomm_product_serviceapplication.dto.ProductResponseDto;
+import com.ecomm.ecomm_product_serviceapplication.exceptions.CategoryNotFoundException;
 import com.ecomm.ecomm_product_serviceapplication.exceptions.ProductNotFoundException;
 import com.ecomm.ecomm_product_serviceapplication.mapper.ProductMapper;
 import com.ecomm.ecomm_product_serviceapplication.model.Product;
@@ -142,6 +143,26 @@ class ProductControllerTest {
         assertEquals("Electronics", product.getCategory().getName());
         assertEquals("All electronics items.", product.getCategory().getDescription());
 
+        verify(productService, times(1)).createProduct(req);
+    }
+
+    @Test
+    public void TestCreateProduct_WithInvalidCategoryId_ThrowsCategoryNotFoundException() {
+        //Arrange
+        ProductRequestDto req = new ProductRequestDto("Phone",
+                "Latest smartphone",
+                699.99,
+                "http://example.com/phone.jpg",
+                10L
+        );
+
+        when(productService.createProduct(req)).thenThrow(new CategoryNotFoundException("Invalid Category ID."));
+
+        // Act
+        CategoryNotFoundException ex = assertThrows(CategoryNotFoundException.class, () -> productController.createProduct(req));
+
+        // Assert
+        assertEquals("Invalid Category ID.", ex.getMessage());
         verify(productService, times(1)).createProduct(req);
     }
 
