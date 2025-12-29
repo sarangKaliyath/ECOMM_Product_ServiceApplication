@@ -1,6 +1,8 @@
 package com.ecomm.ecomm_product_serviceapplication.controller;
 
+import com.ecomm.ecomm_product_serviceapplication.dto.ProductResponseDto;
 import com.ecomm.ecomm_product_serviceapplication.exceptions.ProductNotFoundException;
+import com.ecomm.ecomm_product_serviceapplication.mapper.ProductMapper;
 import com.ecomm.ecomm_product_serviceapplication.model.Product;
 import com.ecomm.ecomm_product_serviceapplication.service.IProductService;
 import org.junit.jupiter.api.Test;
@@ -11,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -72,11 +75,12 @@ class ProductControllerTest {
     @Test
     public void TestGetProductById_WithValidProductId_ReturnsProductSuccessfully() {
         // Arrange
-        List<Product> mockProd = createProducts();
+        List<ProductResponseDto> mockProd = createProducts().stream().map(ProductMapper::toResponse).toList();
         when(productService.getProductById(1L)).thenReturn(mockProd.get(0));
 
         // Act
-        Product product = productService.getProductById(1L);
+        ResponseEntity<ProductResponseDto> productEntity = productController.getProductById(1L);
+        ProductResponseDto product = productEntity.getBody();
 
         // Assert
         assertEquals(1L, product.getId());

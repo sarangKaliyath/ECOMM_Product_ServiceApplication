@@ -26,9 +26,9 @@ public class ProductService implements IProductService {
         return productRepo.findAll();
     }
 
-    public Product getProductById(Long id) {
+    public ProductResponseDto getProductById(Long id) {
         Optional<Product> productOptional = productRepo.findById(id);
-        return productOptional.orElse(null);
+        return productOptional.map(ProductMapper::toResponse).orElse(null);
     }
 
     public ProductResponseDto createProduct(ProductRequestDto requestDto) {

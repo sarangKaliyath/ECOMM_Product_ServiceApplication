@@ -10,7 +10,7 @@ public interface IProductService {
 
     List<Product> getAllProducts();
 
-    Product getProductById(Long id);
+    ProductResponseDto getProductById(Long id);
 
     ProductResponseDto createProduct(ProductRequestDto productRequestDto);
 
