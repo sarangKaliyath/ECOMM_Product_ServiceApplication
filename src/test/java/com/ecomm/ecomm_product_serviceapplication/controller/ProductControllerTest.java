@@ -1,19 +1,25 @@
 package com.ecomm.ecomm_product_serviceapplication.controller;
 
+import com.ecomm.ecomm_product_serviceapplication.exceptions.ProductNotFoundException;
 import com.ecomm.ecomm_product_serviceapplication.model.Product;
 import com.ecomm.ecomm_product_serviceapplication.service.IProductService;
 import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.Equality;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ProductControllerTest {
+
+    @Autowired
+    private ProductController productController;
 
     @MockBean
     private IProductService productService;
@@ -22,27 +28,13 @@ class ProductControllerTest {
     public void TestGetAllProducts_ReturnsProductsSuccessfully() {
 
         // Arrange
-        Product productOne = new Product();
-        productOne.setName("productOne");
-        productOne.setId(1L);
-        productOne.setDescription("Test ProductOne Description");
-        productOne.setPrice(100.0);
-        productOne.setImageUrl("http://test-product-one");
-
-        Product productTwo = new Product();
-        productTwo.setName("productTwo");
-        productTwo.setId(2L);
-        productTwo.setDescription("Test ProductTwo Description");
-        productTwo.setPrice(200.0);
-        productTwo.setImageUrl("http://test-product-two");
-
-        List<Product> mockProd = List.of(productOne, productTwo);
+        List<Product> mockProd = createProducts();
 
         // Stub the MOCK
         when(productService.getAllProducts()).thenReturn(mockProd);
 
         // Act
-        List<Product> products = productService.getAllProducts();
+        List<Product> products = productController.getAllProducts();
 
         // Assert
         assertEquals(2, products.size());
@@ -60,11 +52,70 @@ class ProductControllerTest {
         assertEquals(200.0, secondProduct.getPrice());
         assertEquals("http://test-product-two", secondProduct.getImageUrl());
         assertEquals("Test ProductTwo Description", secondProduct.getDescription());
+
+        verify(productService, times(1)).getAllProducts();
     }
 
+    @Test
     public void TestGetAllProducts_WhenNoProducts_ReturnsEmptyList() {
+        // Arrange
         when(productService.getAllProducts()).thenReturn(List.of());
-        assertEquals(0, productService.getAllProducts().size());
+
+        // Act
+        List<Product> products = productController.getAllProducts();
+
+        // Assert
+        assertEquals(0, products.size());
+        verify(productService, times(1)).getAllProducts();
     }
 
+    @Test
+    public void TestGetProductById_WithValidProductId_ReturnsProductSuccessfully() {
+        // Arrange
+        List<Product> mockProd = createProducts();
+        when(productService.getProductById(1L)).thenReturn(mockProd.get(0));
+
+        // Act
+        Product product = productService.getProductById(1L);
+
+        // Assert
+        assertEquals(1L, product.getId());
+        assertEquals("productOne", product.getName());
+        assertEquals(100.0, product.getPrice());
+        assertEquals("Test ProductOne Description", product.getDescription());
+        assertEquals("http://test-product-one", product.getImageUrl());
+
+        verify(productService, times(1)).getProductById(1L);
+    }
+
+    @Test
+    public void TestGetProductById_WithInvalidProductId_ThrowsProductNotFoundException() {
+        // Arrange
+        when(productService.getProductById(3L)).thenReturn(null);
+
+        // Act && Assert
+        ProductNotFoundException ex = assertThrows(ProductNotFoundException.class, () -> productController.getProductById(3L));
+
+        assertEquals("Invalid Product ID", ex.getMessage());
+        verify(productService, times(1)).getProductById(3L);
+    }
+
+
+    public List<Product> createProducts() {
+        Product productOne = new Product();
+        productOne.setName("productOne");
+        productOne.setId(1L);
+        productOne.setDescription("Test ProductOne Description");
+        productOne.setPrice(100.0);
+        productOne.setImageUrl("http://test-product-one");
+
+        Product productTwo = new Product();
+        productTwo.setName("productTwo");
+        productTwo.setId(2L);
+        productTwo.setDescription("Test ProductTwo Description");
+        productTwo.setPrice(200.0);
+        productTwo.setImageUrl("http://test-product-two");
+
+        return List.of(productOne, productTwo);
+    }
 }
