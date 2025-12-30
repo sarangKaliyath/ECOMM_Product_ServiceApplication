@@ -3,6 +3,7 @@ package com.ecomm.ecomm_product_serviceapplication.controller;
 import com.ecomm.ecomm_product_serviceapplication.dto.CategoryResponseDto;
 import com.ecomm.ecomm_product_serviceapplication.dto.ProductRequestDto;
 import com.ecomm.ecomm_product_serviceapplication.dto.ProductResponseDto;
+import com.ecomm.ecomm_product_serviceapplication.exceptions.CategoryNotFoundException;
 import com.ecomm.ecomm_product_serviceapplication.service.IProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -139,6 +140,29 @@ class ProductControllerMvcTest {
                 .andExpect(jsonPath("$.imageUrl").value("http://example.com/phone.jpg"))
                 .andExpect(jsonPath("$.category.id").value(2))
                 .andExpect(jsonPath("$.category.name").value("Electronics"));
+
+        verify(productService, times(1)).createProduct(any(ProductRequestDto.class));
+    }
+
+    @Test
+    public void TestCreateProduct_WithInvalidCategoryId_ThrowsCategoryNotFoundException() throws Exception {
+        // Arrange
+        ProductRequestDto req = new ProductRequestDto("Phone",
+                "Latest smartphone",
+                699.99,
+                "http://example.com/phone.jpg",
+                5L
+        );
+
+        when(productService.createProduct(any(ProductRequestDto.class))).thenThrow(new CategoryNotFoundException("Invalid Category ID."));
+
+        // Act && Assert
+        mockMvc.perform(post("/product")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req))
+                )
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Invalid Category ID."));
 
         verify(productService, times(1)).createProduct(any(ProductRequestDto.class));
     }
