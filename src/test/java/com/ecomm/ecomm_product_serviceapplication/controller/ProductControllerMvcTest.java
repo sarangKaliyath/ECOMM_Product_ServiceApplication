@@ -59,7 +59,24 @@ class ProductControllerMvcTest {
     }
 
     @Test
-    void getProductById() {
+    void TestGetProductById_WithValidProductId_ReturnsProductSuccessfully() throws Exception {
+        // Arrange
+        ProductResponseDto mockProduct = new ProductResponseDto(1L, "productOne", "Test ProductOne Description", 100.0, "http://test-product-one",
+                new CategoryResponseDto(1L, "Category1", "Description1"));
+
+        when(productService.getProductById(1L)).thenReturn(mockProduct);
+
+        // Act && Assert
+
+        mockMvc.perform(get("/product/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("productOne"))
+                .andExpect(jsonPath("$.price").value(100.0))
+                .andExpect(jsonPath("$.category.id").value(1))
+                .andExpect(jsonPath("$.category.name").value("Category1"));
+
+        verify(productService, times(1)).getProductById(1L);
     }
 
     @Test
