@@ -46,4 +46,9 @@ public class ProductController {
         DeleteType type = productService.deleteProduct(id);
         return type == DeleteType.SOFT_DELETE ? ResponseEntity.noContent().build() : ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductResponseDto> replaceProduct(@PathVariable long id, @RequestBody ProductRequestDto productRequestDto) {
+        return new ResponseEntity<>(productService.replaceProduct(productRequestDto, id), HttpStatus.OK);
+    }
 }

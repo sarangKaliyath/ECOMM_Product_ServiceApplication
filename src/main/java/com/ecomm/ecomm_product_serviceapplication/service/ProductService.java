@@ -47,8 +47,23 @@ public class ProductService implements IProductService {
         return ProductMapper.toResponse(savedProduct);
     }
 
-    public Product replaceProduct(Product product, long id) {
-        return null;
+    public ProductResponseDto replaceProduct(ProductRequestDto productRequestDto, long id) {
+        Product product = productRepo.findById(id).orElseThrow(() -> new ProductNotFoundException("Invalid Product ID."));
+
+        product.setName(productRequestDto.getName());
+        product.setDescription(productRequestDto.getDescription());
+        product.setPrice(productRequestDto.getPrice());
+        product.setImageUrl(productRequestDto.getImageUrl());
+        product.setState(State.ACTIVE);
+
+        if (productRequestDto.getCategoryId() != null && !productRequestDto.getCategoryId().equals(product.getCategory().getId())) {
+            Category category = categoryRepo.findById(productRequestDto.getCategoryId())
+                    .orElseThrow(() -> new CategoryNotFoundException("Invalid Category ID."));
+
+            product.setCategory(category);
+        }
+
+        return ProductMapper.toResponse(productRepo.save(product));
     }
 
     public DeleteType deleteProduct(Long id) {
