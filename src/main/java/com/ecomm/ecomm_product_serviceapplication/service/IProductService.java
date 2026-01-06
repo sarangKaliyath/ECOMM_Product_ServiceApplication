@@ -2,6 +2,7 @@ package com.ecomm.ecomm_product_serviceapplication.service;
 
 import com.ecomm.ecomm_product_serviceapplication.dto.ProductRequestDto;
 import com.ecomm.ecomm_product_serviceapplication.dto.ProductResponseDto;
+import com.ecomm.ecomm_product_serviceapplication.model.DeleteType;
 import com.ecomm.ecomm_product_serviceapplication.model.Product;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface IProductService {
 
     Product replaceProduct(Product product, long id);
 
-    boolean deleteProduct(Long id);
+    DeleteType deleteProduct(Long id);
 }
