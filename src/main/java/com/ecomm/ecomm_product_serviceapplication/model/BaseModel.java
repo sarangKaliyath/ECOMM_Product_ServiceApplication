@@ -1,6 +1,6 @@
 package com.ecomm.ecomm_product_serviceapplication.model;
 
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,8 +10,19 @@ import java.util.Date;
 @Setter
 @MappedSuperclass
 public abstract class BaseModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Date createdAt;
     private Date updatedAt;
+
+    @Enumerated(EnumType.STRING)
     private State state;
+
+    public BaseModel() {
+        this.state = State.ACTIVE;
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
 }
