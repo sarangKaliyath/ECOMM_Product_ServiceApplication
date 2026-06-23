@@ -28,6 +28,10 @@ public class ProductService implements IProductService {
         return productRepo.findByState(State.ACTIVE).stream().map(ProductMapper::toResponse).toList();
     }
 
+//    public  List<ProductResponseDto> getAllProducts(Category category) {
+//        return null;
+//    }
+
     public ProductResponseDto getProductById(Long id) {
         Optional<Product> productOptional = productRepo.findById(id);
         return productOptional.map(ProductMapper::toResponse).orElse(null);
