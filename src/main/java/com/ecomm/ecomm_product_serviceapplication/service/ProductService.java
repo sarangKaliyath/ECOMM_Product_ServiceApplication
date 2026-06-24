@@ -12,6 +12,8 @@ import com.ecomm.ecomm_product_serviceapplication.model.State;
 import com.ecomm.ecomm_product_serviceapplication.repository.CategoryRepo;
 import com.ecomm.ecomm_product_serviceapplication.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,9 +30,9 @@ public class ProductService implements IProductService {
         return productRepo.findByState(State.ACTIVE).stream().map(ProductMapper::toResponse).toList();
     }
 
-//    public  List<ProductResponseDto> getAllProducts(Category category) {
-//        return null;
-//    }
+    public Page<ProductResponseDto> getProducts(Pageable pageable) {
+        return productRepo.findAll(pageable).map(ProductMapper::toResponse);
+    }
 
     public ProductResponseDto getProductById(Long id) {
         Optional<Product> productOptional = productRepo.findById(id);

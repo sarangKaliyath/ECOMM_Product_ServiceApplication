@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,4 +18,5 @@ public class ProductResponseDto {
     private Double price;
     private String imageUrl;
     private CategoryResponseDto category;
+    private Date created_at;
 }

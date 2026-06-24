@@ -10,6 +10,8 @@ import com.ecomm.ecomm_product_serviceapplication.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +30,10 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-//    @GetMapping
-//    public Page<ProductResponseDto> getAllProducts(Category category, SpringDataWebProperties.Pageable pageable) {
-//
-//        return null;
-//    }
+    @GetMapping("/list")
+    public Page<ProductResponseDto> getProducts(@PageableDefault(size = 2) Pageable pageable) {
+        return productService.getProducts(pageable);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> getProductById(@PathVariable long id) {

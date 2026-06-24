@@ -27,6 +27,7 @@ public class ProductMapper {
         dto.setDescription(product.getDescription());
         dto.setImageUrl(product.getImageUrl());
         dto.setPrice(product.getPrice());
+        dto.setCreated_at(product.getCreatedAt());
 
         if (product.getCategory() != null) {
             CategoryResponseDto catDto = new CategoryResponseDto();

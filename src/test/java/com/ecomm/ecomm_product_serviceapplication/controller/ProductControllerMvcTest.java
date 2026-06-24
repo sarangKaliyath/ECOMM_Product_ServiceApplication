@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -38,9 +39,9 @@ class ProductControllerMvcTest {
     public void TestGetAllProducts_ReturnsProductsSuccessfully() throws Exception {
         List<ProductResponseDto> mockProducts = List.of(
                 new ProductResponseDto(1L, "productOne", "Test ProductOne Description", 100.0, "http://test-product-one",
-                        new CategoryResponseDto(1L, "Category1", "Description1")),
+                        new CategoryResponseDto(1L, "Category1", "Description1"), new Date()),
                 new ProductResponseDto(2L, "productTwo", "Test ProductTwo Description", 200.0, "http://test-product-two",
-                        new CategoryResponseDto(2L, "Category2", "Description2"))
+                        new CategoryResponseDto(2L, "Category2", "Description2"), new Date())
         );
 
         when(productService.getAllProducts()).thenReturn(mockProducts);
@@ -77,7 +78,7 @@ class ProductControllerMvcTest {
     public void TestGetProductById_WithValidProductId_ReturnsProductSuccessfully() throws Exception {
         // Arrange
         ProductResponseDto mockProduct = new ProductResponseDto(1L, "productOne", "Test ProductOne Description", 100.0, "http://test-product-one",
-                new CategoryResponseDto(1L, "Category1", "Description1"));
+                new CategoryResponseDto(1L, "Category1", "Description1"), new Date());
 
         when(productService.getProductById(1L)).thenReturn(mockProduct);
 
@@ -123,7 +124,8 @@ class ProductControllerMvcTest {
                 "Latest smartphone",
                 699.99,
                 "http://example.com/phone.jpg",
-                new CategoryResponseDto(2L, "Electronics", "All electronics items.")
+                new CategoryResponseDto(2L, "Electronics", "All electronics items."),
+                new Date()
         );
 
         when(productService.createProduct(any(ProductRequestDto.class))).thenReturn(responseDto);

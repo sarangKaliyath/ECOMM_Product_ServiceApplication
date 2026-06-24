@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -123,7 +124,8 @@ class ProductControllerTest {
                 "Latest smartphone",
                 699.99,
                 "http://example.com/phone.jpg",
-                new CategoryResponseDto(2L, "Electronics", "All electronics items.")
+                new CategoryResponseDto(2L, "Electronics", "All electronics items."),
+                new Date()
         );
 
         when(productService.createProduct(req)).thenReturn(responseDto);
