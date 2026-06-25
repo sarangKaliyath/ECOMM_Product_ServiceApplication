@@ -13,7 +13,7 @@ public interface IProductService {
 
     List<ProductResponseDto> getAllProducts();
 
-    Page<ProductResponseDto> getProducts(Pageable pageable);
+    Page<ProductResponseDto> getProducts(Long categoryId, Double maxPrice, Double minPrice, Double rating, Boolean inStock, Boolean onSale, Pageable pageable);
 
     ProductResponseDto getProductById(Long id);
 

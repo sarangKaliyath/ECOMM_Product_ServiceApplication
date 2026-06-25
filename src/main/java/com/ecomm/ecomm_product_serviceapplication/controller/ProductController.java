@@ -29,10 +29,17 @@ public class ProductController {
     public List<ProductResponseDto> getAllProducts() {
         return productService.getAllProducts();
     }
-
+    
     @GetMapping("/list")
-    public Page<ProductResponseDto> getProducts(@PageableDefault(size = 2) Pageable pageable) {
-        return productService.getProducts(pageable);
+    public Page<ProductResponseDto> getProducts(
+            @RequestParam(value = "category_id", required = false) Long categoryId,
+            @RequestParam(value = "max_price", required = false) Double maxPrice,
+            @RequestParam(value = "min_price", required = false) Double minPrice,
+            @RequestParam(value = "rating", required = false) Double rating,
+            @RequestParam(value = "in_stock", required = false) Boolean inStock,
+            @RequestParam(value = "on_sale", required = false) Boolean onSale,
+            @PageableDefault(size = 2) Pageable pageable) {
+        return productService.getProducts(categoryId, maxPrice, minPrice, rating, inStock, onSale, pageable);
     }
 
     @GetMapping("/{id}")

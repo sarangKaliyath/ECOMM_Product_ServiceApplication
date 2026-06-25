@@ -30,8 +30,21 @@ public class ProductService implements IProductService {
         return productRepo.findByState(State.ACTIVE).stream().map(ProductMapper::toResponse).toList();
     }
 
-    public Page<ProductResponseDto> getProducts(Pageable pageable) {
-        return productRepo.findAll(pageable).map(ProductMapper::toResponse);
+    @Override
+    public Page<ProductResponseDto> getProducts(
+            Long categoryId,
+            Double maxPrice, Double minPrice,
+            Double rating,
+            Boolean inStock, Boolean onSale,
+            Pageable pageable
+    ) {
+
+        // Fetch and filter products based on the provided criteria
+        Page<Product> result = productRepo.findProductsByFilters(
+                categoryId, maxPrice, minPrice, rating, inStock, onSale, pageable);
+
+        // Convert products into DTOs
+        return result.map(ProductMapper::toResponse);
     }
 
     public ProductResponseDto getProductById(Long id) {
