@@ -10,6 +10,13 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(
+        indexes = {
+                @Index(name = "idx_product_category", columnList = "category_id"),
+                @Index(name = "idx_default_price", columnList = "default_price"),
+                @Index(name = "idx_average_rating", columnList = "average_rating")
+        }
+)
 public class Product extends BaseModel {
     @Column(nullable = false)
     private String name;
@@ -59,4 +66,6 @@ public class Product extends BaseModel {
     @JoinColumn(name = "product_id")
     private List<ProductAttribute> attributes;
 
+    private Boolean onSale = false; // Whether the product is on sale
+    private Double discountRate = 0.0; // Discount rate in percentages
 }

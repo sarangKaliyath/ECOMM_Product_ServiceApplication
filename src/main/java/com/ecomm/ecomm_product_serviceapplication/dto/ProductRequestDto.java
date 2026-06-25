@@ -29,4 +29,6 @@ public class ProductRequestDto {
     private String sellerId; // Reference to the seller's ID
     private List<String> imageUrls; // List of additional product image URLs
     private List<ProductAttributeDto> attributes; // Additional attributes as key-value DTOs
+    private Boolean onSale; // Whether the product is on sale
+    private Double discountRate; // Discount rate in percentages
 }

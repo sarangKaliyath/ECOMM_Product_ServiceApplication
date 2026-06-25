@@ -92,6 +92,9 @@ public class ProductMapper {
                     .map(attr -> new ProductAttributeDto(attr.getAttributeName(), attr.getAttributeValue()))
                     .collect(Collectors.toList()));
         }
+        
+        responseDto.setOnSale(product.getOnSale());
+        responseDto.setDiscountRate(product.getDiscountRate());
 
         return responseDto;
     }

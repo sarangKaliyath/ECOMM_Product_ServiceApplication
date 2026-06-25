@@ -32,4 +32,6 @@ public class ProductResponseDto {
     private List<ProductAttributeDto> attributes; // Additional attributes in key-value pairs
     private CategoryResponseDto category; // Associated category details (ID, name, description)
     private Date createdAt; // Timestamp for product creation
+    private Boolean onSale; // Whether the product is on sale
+    private Double discountRate; // Discount rate in percentages
 }
