@@ -1,5 +1,6 @@
 package com.ecomm.ecomm_product_serviceapplication.dto;
 
+import com.ecomm.ecomm_product_serviceapplication.model.ProductImage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,7 @@ public class ProductResponseDto {
     private Double averageRating; // Average rating of the product
     private Integer reviewCount; // Number of reviews for the product
     private String sellerId; // Seller/merchant ID who owns the product
-    private List<String> imageUrls; // Additional images of the product
+    private List<ProductImage> images; // Additional images of the product
     private List<ProductAttributeDto> attributes; // Additional attributes in key-value pairs
     private CategoryResponseDto category; // Associated category details (ID, name, description)
     private Date createdAt; // Timestamp for product creation

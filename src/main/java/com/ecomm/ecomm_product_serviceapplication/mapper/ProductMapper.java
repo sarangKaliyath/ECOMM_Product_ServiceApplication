@@ -5,6 +5,7 @@ import com.ecomm.ecomm_product_serviceapplication.dto.ProductAttributeDto;
 import com.ecomm.ecomm_product_serviceapplication.dto.ProductRequestDto;
 import com.ecomm.ecomm_product_serviceapplication.dto.ProductResponseDto;
 import com.ecomm.ecomm_product_serviceapplication.model.*;
+
 import java.util.stream.Collectors;
 
 public class ProductMapper {
@@ -27,16 +28,12 @@ public class ProductMapper {
         product.setSellerId(dto.getSellerId());
         product.setCategory(category);
 
-        if (dto.getImageUrls() != null) {
-            product.setImages(dto.getImageUrls().stream()
-                    .map(url -> {
-                        ProductImage image = new ProductImage();
-                        image.setImageUrl(url);
-                        return image;
-                    })
-                    .collect(Collectors.toList()));
+        // Map images
+        if (dto.getImages() != null) {
+            product.setImages(dto.getImages());
         }
 
+        // Map attributes
         if (dto.getAttributes() != null) {
             product.setAttributes(dto.getAttributes().stream()
                     .map(attrDto -> {
@@ -69,7 +66,7 @@ public class ProductMapper {
         responseDto.setReviewCount(product.getReviewCount());
         responseDto.setSellerId(product.getSellerId());
         responseDto.setCreatedAt(product.getCreatedAt());
-        
+
         // Map category details
         if (product.getCategory() != null) {
             responseDto.setCategory(new CategoryResponseDto(
@@ -81,9 +78,7 @@ public class ProductMapper {
 
         // Map product images
         if (product.getImages() != null) {
-            responseDto.setImageUrls(product.getImages().stream()
-                    .map(ProductImage::getImageUrl)
-                    .collect(Collectors.toList()));
+            responseDto.setImages(product.getImages());
         }
 
         // Map product attributes
@@ -92,7 +87,7 @@ public class ProductMapper {
                     .map(attr -> new ProductAttributeDto(attr.getAttributeName(), attr.getAttributeValue()))
                     .collect(Collectors.toList()));
         }
-        
+
         responseDto.setOnSale(product.getOnSale());
         responseDto.setDiscountRate(product.getDiscountRate());
 

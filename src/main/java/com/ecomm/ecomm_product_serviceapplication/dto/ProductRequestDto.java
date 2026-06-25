@@ -1,5 +1,6 @@
 package com.ecomm.ecomm_product_serviceapplication.dto;
 
+import com.ecomm.ecomm_product_serviceapplication.model.ProductImage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ public class ProductRequestDto {
     private Double averageRating; // Average rating of the product
     private Integer reviewCount; // Number of reviews for the product
     private String sellerId; // Reference to the seller's ID
-    private List<String> imageUrls; // List of additional product image URLs
+    private List<ProductImage> images; // List of additional product images
     private List<ProductAttributeDto> attributes; // Additional attributes as key-value DTOs
     private Boolean onSale; // Whether the product is on sale
     private Double discountRate; // Discount rate in percentages
