@@ -19,6 +19,8 @@ public class Product extends BaseModel {
     private String primaryImageUrl;
 
     private String shortDescription;
+
+    @Column(length = 500)
     private String description;
 
     private String brand;

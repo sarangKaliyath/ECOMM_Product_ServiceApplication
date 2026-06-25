@@ -40,10 +40,10 @@ public class ProductService implements IProductService {
     }
 
     public ProductResponseDto createProduct(ProductRequestDto requestDto) {
-        Product product = ProductMapper.toEntity(requestDto);
-
         Category category = categoryRepo.findById(requestDto.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("Invalid Category ID."));
+
+        Product product = ProductMapper.toEntity(requestDto, category);
 
         product.setCategory(category);
         product.setState(State.ACTIVE);
@@ -54,36 +54,10 @@ public class ProductService implements IProductService {
     }
 
     public ProductResponseDto replaceProduct(ProductRequestDto productRequestDto, long id) {
-        Product product = productRepo.findById(id).orElseThrow(() -> new ProductNotFoundException("Invalid Product ID."));
-
-        product.setName(productRequestDto.getName());
-        product.setDescription(productRequestDto.getDescription());
-        product.setPrice(productRequestDto.getPrice());
-        product.setImageUrl(productRequestDto.getImageUrl());
-        product.setState(State.ACTIVE);
-
-        if (productRequestDto.getCategoryId() != null && !productRequestDto.getCategoryId().equals(product.getCategory().getId())) {
-            Category category = categoryRepo.findById(productRequestDto.getCategoryId())
-                    .orElseThrow(() -> new CategoryNotFoundException("Invalid Category ID."));
-
-            product.setCategory(category);
-        }
-
-        return ProductMapper.toResponse(productRepo.save(product));
+        return null;
     }
 
     public DeleteType deleteProduct(Long id) {
-        Product product = productRepo.findById(id).orElseThrow(() -> new ProductNotFoundException("Invalid Product ID."));
-
-        if (product.getState() == State.ACTIVE) {
-            product.setState(State.INACTIVE);
-            productRepo.save(product);
-            return DeleteType.SOFT_DELETE;
-        } else if (product.getState() == State.INACTIVE) {
-            productRepo.delete(product);
-            return DeleteType.HARD_DELETE;
-        }
-
-        throw new IllegalStateException("Invalid Product State.");
+        return null;
     }
 }
