@@ -60,8 +60,9 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable long id) {
-        DeleteType type = productService.deleteProduct(id);
-        return type == DeleteType.SOFT_DELETE ? ResponseEntity.noContent().build() : ResponseEntity.ok().build();
+//        DeleteType type = productService.deleteProduct(id);
+//        return type == DeleteType.SOFT_DELETE ? ResponseEntity.noContent().build() : ResponseEntity.ok().build();
+        return null;
     }
 
     @PutMapping("/{id}")
