@@ -1,9 +1,6 @@
 package com.ecomm.ecomm_product_serviceapplication.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
@@ -15,14 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 public class Category extends BaseModel {
+    @Column(unique = true, nullable = false)
     private String name;
     private String description;
-
-    @OneToMany(
-            mappedBy = "category",
-            cascade = CascadeType.ALL,
-            orphanRemoval = false
-    )
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Product> products;
 }
